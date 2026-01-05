@@ -1,0 +1,6 @@
+{
+  "customApiKeyResponses": {
+    "approved": ["dummy"],
+    "rejected": []
+  }
+}

@@ -1,0 +1,19 @@
+services:
+  claude-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.claude
+    container_name: claude-dev
+    stdin_open: true
+    tty: true
+    volumes:
+      # Accounts config (persists across rebuilds)
+      - ./data/accounts.json:/root/.config/antigravity-proxy/accounts.json
+      # Mount your project workspace
+      - /home/louiskaneko/dev:/workspace
+      # Claude Code settings - pre-configured for local proxy
+      - ./data/claude/settings.json:/root/.claude/settings.json
+    environment:
+      - ANTHROPIC_BASE_URL=http://localhost:8080
+      - FALLBACK=true
+    working_dir: /workspace

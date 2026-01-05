@@ -1,0 +1,52 @@
+FROM node:20-bookworm
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    wget \
+    vim \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Claude Code CLI globally
+RUN npm install -g @anthropic-ai/claude-code
+
+# Create working directories
+WORKDIR /proxy
+RUN mkdir -p /root/.config/antigravity-proxy /root/.claude /workspace
+
+# Install proxy dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy proxy source
+COPY src/ ./src/
+COPY scripts/ ./scripts/
+
+# Copy Claude Code settings (pre-configured for local proxy)
+# ~/.claude/settings.json - User settings with apiKeyHelper
+COPY data/claude/settings.json /root/.claude/settings.json
+# ~/.claude/.credentials.json - OAuth credentials (dummy to bypass)
+COPY data/claude/.credentials.json /root/.claude/.credentials.json
+# ~/.claude/config.json - Required to skip claude.ai login
+COPY data/claude/config.json /root/.claude/config.json
+# ~/.claude.json - Global state with approved API keys
+COPY data/claude/.claude.json /root/.claude.json
+
+# Environment variables for Claude Code
+# API key provided by apiKeyHelper in settings.json (not env var to avoid conflict)
+ENV ANTHROPIC_BASE_URL=http://localhost:8080
+ENV DISABLE_NON_ESSENTIAL_MODEL_CALLS=1
+ENV CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+ENV PORT=8080
+
+# Start script that runs proxy in background and opens shell
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+WORKDIR /workspace
+
+EXPOSE 8080
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
