@@ -1,199 +1,158 @@
 /**
- * Unit tests for Logger class
+ * Unit tests for Pino-based Logger
  *
- * Note: This test file imports Logger directly and does NOT use the global mock
- * from tests/setup.ts since we need to test the actual Logger implementation.
+ * Tests the logger utility functions: getLogger(), initLogger(), setLogLevel()
+ * Note: These tests verify the API behavior, not Pino's internal implementation.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-// Unmock the logger module for this test file
+// Unmock the logger module for this test file since we want to test the real implementation
 vi.unmock("../../../src/utils/logger.js");
 
-// Import directly after unmocking
-import { Logger } from "../../../src/utils/logger.js";
+// Import after unmocking
+import { getLogger, initLogger, setLogLevel, type LogLevel } from "../../../src/utils/logger.js";
 
-describe("Logger", () => {
-  let logger: Logger;
-  let consoleSpy: ReturnType<typeof vi.spyOn>;
-
+describe("Pino Logger", () => {
   beforeEach(() => {
-    logger = new Logger();
-    consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    consoleSpy.mockRestore();
-  });
-
-  describe("constructor", () => {
-    it("initializes with debug disabled", () => {
-      expect(logger.isDebugEnabled).toBe(false);
-    });
-  });
-
-  describe("setDebug", () => {
-    it("enables debug mode", () => {
-      logger.setDebug(true);
-      expect(logger.isDebugEnabled).toBe(true);
+  describe("getLogger", () => {
+    it("returns a logger instance", () => {
+      const logger = getLogger();
+      expect(logger).toBeDefined();
     });
 
-    it("disables debug mode", () => {
-      logger.setDebug(true);
-      logger.setDebug(false);
-      expect(logger.isDebugEnabled).toBe(false);
-    });
-  });
-
-  describe("info", () => {
-    it("logs info message with blue color and INFO tag", () => {
-      logger.info("Test message");
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("[INFO]");
-      expect(call).toContain("Test message");
+    it("has standard log methods", () => {
+      const logger = getLogger();
+      expect(typeof logger.info).toBe("function");
+      expect(typeof logger.warn).toBe("function");
+      expect(typeof logger.error).toBe("function");
+      expect(typeof logger.debug).toBe("function");
+      expect(typeof logger.trace).toBe("function");
     });
 
-    it("logs info message with additional arguments", () => {
-      logger.info("Test message", { key: "value" });
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      expect(consoleSpy.mock.calls[0]).toHaveLength(2);
-      expect(consoleSpy.mock.calls[0][1]).toEqual({ key: "value" });
+    it("returns the same instance on multiple calls (singleton)", () => {
+      const logger1 = getLogger();
+      const logger2 = getLogger();
+      expect(logger1).toBe(logger2);
     });
   });
 
-  describe("success", () => {
-    it("logs success message with green color and SUCCESS tag", () => {
-      logger.success("Success message");
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("[SUCCESS]");
-      expect(call).toContain("Success message");
+  describe("initLogger", () => {
+    it("accepts level option without throwing", () => {
+      expect(() => initLogger({ level: "debug" })).not.toThrow();
+    });
+
+    it("accepts empty options without throwing", () => {
+      expect(() => initLogger()).not.toThrow();
+      expect(() => initLogger({})).not.toThrow();
+    });
+
+    it("can be called multiple times", () => {
+      expect(() => {
+        initLogger({ level: "debug" });
+        initLogger({ level: "info" });
+        initLogger({ level: "warn" });
+      }).not.toThrow();
     });
   });
 
-  describe("warn", () => {
-    it("logs warning message with yellow color and WARN tag", () => {
-      logger.warn("Warning message");
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("[WARN]");
-      expect(call).toContain("Warning message");
+  describe("setLogLevel", () => {
+    it("changes the log level dynamically", () => {
+      const logger = getLogger();
+      setLogLevel("debug");
+      expect(logger.level).toBe("debug");
+    });
+
+    it("can set level to error", () => {
+      setLogLevel("error");
+      const logger = getLogger();
+      expect(logger.level).toBe("error");
+    });
+
+    it("can set level to warn", () => {
+      setLogLevel("warn");
+      const logger = getLogger();
+      expect(logger.level).toBe("warn");
+    });
+
+    it("can set level to info", () => {
+      setLogLevel("info");
+      const logger = getLogger();
+      expect(logger.level).toBe("info");
+    });
+
+    it("can set level to silent", () => {
+      setLogLevel("silent");
+      const logger = getLogger();
+      expect(logger.level).toBe("silent");
+    });
+
+    it("can set level to trace", () => {
+      setLogLevel("trace");
+      const logger = getLogger();
+      expect(logger.level).toBe("trace");
     });
   });
 
-  describe("error", () => {
-    it("logs error message with red color and ERROR tag", () => {
-      logger.error("Error message");
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("[ERROR]");
-      expect(call).toContain("Error message");
+  describe("logger level property", () => {
+    it("reflects the current log level", () => {
+      const logger = getLogger();
+      const originalLevel = logger.level;
+
+      setLogLevel("debug");
+      expect(logger.level).toBe("debug");
+
+      // Restore original level
+      setLogLevel(originalLevel as LogLevel);
     });
   });
 
-  describe("debug", () => {
-    it("does not log when debug is disabled", () => {
-      logger.setDebug(false);
-      logger.debug("Debug message");
-      expect(consoleSpy).not.toHaveBeenCalled();
+  describe("log method calls", () => {
+    it("info method does not throw", () => {
+      const logger = getLogger();
+      expect(() => logger.info("test message")).not.toThrow();
     });
 
-    it("logs when debug is enabled", () => {
-      logger.setDebug(true);
-      logger.debug("Debug message");
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("[DEBUG]");
-      expect(call).toContain("Debug message");
+    it("warn method does not throw", () => {
+      const logger = getLogger();
+      expect(() => logger.warn("warning message")).not.toThrow();
     });
 
-    it("logs with magenta color when debug is enabled", () => {
-      logger.setDebug(true);
-      logger.debug("Debug message");
-      const call = consoleSpy.mock.calls[0][0] as string;
-      // Magenta ANSI code is \x1b[35m
-      expect(call).toContain("\x1b[35m");
-    });
-  });
-
-  describe("log", () => {
-    it("logs raw message directly to console", () => {
-      logger.log("Raw message");
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      expect(consoleSpy.mock.calls[0][0]).toBe("Raw message");
+    it("error method does not throw", () => {
+      const logger = getLogger();
+      expect(() => logger.error("error message")).not.toThrow();
     });
 
-    it("logs raw message with additional arguments", () => {
-      logger.log("Raw message", 1, 2, 3);
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      expect(consoleSpy.mock.calls[0]).toEqual(["Raw message", 1, 2, 3]);
+    it("debug method does not throw", () => {
+      const logger = getLogger();
+      setLogLevel("debug"); // Enable debug level
+      expect(() => logger.debug("debug message")).not.toThrow();
+    });
+
+    it("trace method does not throw", () => {
+      const logger = getLogger();
+      setLogLevel("trace"); // Enable trace level
+      expect(() => logger.trace("trace message")).not.toThrow();
+    });
+
+    it("supports object logging", () => {
+      const logger = getLogger();
+      const obj = { key: "value", count: 42 };
+      expect(() => logger.info(obj, "log with object")).not.toThrow();
     });
   });
 
-  describe("header", () => {
-    it("prints section header with formatting", () => {
-      logger.header("Section Title");
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("=== Section Title ===");
-    });
-
-    it("includes bright and cyan colors", () => {
-      logger.header("Section Title");
-      const call = consoleSpy.mock.calls[0][0] as string;
-      // Bright ANSI code is \x1b[1m
-      expect(call).toContain("\x1b[1m");
-      // Cyan ANSI code is \x1b[36m
-      expect(call).toContain("\x1b[36m");
-    });
-  });
-
-  describe("timestamp format", () => {
-    it("includes ISO timestamp in log output", () => {
-      logger.info("Test message");
-      const call = consoleSpy.mock.calls[0][0] as string;
-      // ISO timestamp pattern: YYYY-MM-DDTHH:MM:SS.sssZ
-      expect(call).toMatch(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/);
-    });
-  });
-
-  describe("color codes", () => {
-    it("uses blue for INFO", () => {
-      logger.info("Test");
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("\x1b[34m"); // Blue
-    });
-
-    it("uses green for SUCCESS", () => {
-      logger.success("Test");
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("\x1b[32m"); // Green
-    });
-
-    it("uses yellow for WARN", () => {
-      logger.warn("Test");
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("\x1b[33m"); // Yellow
-    });
-
-    it("uses red for ERROR", () => {
-      logger.error("Test");
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("\x1b[31m"); // Red
-    });
-
-    it("uses magenta for DEBUG", () => {
-      logger.setDebug(true);
-      logger.debug("Test");
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("\x1b[35m"); // Magenta
-    });
-
-    it("includes reset code after tags", () => {
-      logger.info("Test");
-      const call = consoleSpy.mock.calls[0][0] as string;
-      expect(call).toContain("\x1b[0m"); // Reset
+  describe("log level types", () => {
+    it("supports all standard log levels", () => {
+      const levels: LogLevel[] = ["silent", "error", "warn", "info", "debug", "trace"];
+      for (const level of levels) {
+        expect(() => setLogLevel(level)).not.toThrow();
+        const logger = getLogger();
+        expect(logger.level).toBe(level);
+      }
     });
   });
 });

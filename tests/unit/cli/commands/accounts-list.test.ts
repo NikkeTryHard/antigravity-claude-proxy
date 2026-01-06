@@ -7,7 +7,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock the logger module before importing
-vi.mock("../../../../src/utils/logger-new.js", () => {
+vi.mock("../../../../src/utils/logger.js", () => {
   const mockLogger = {
     info: vi.fn(),
     debug: vi.fn(),
@@ -21,7 +21,7 @@ vi.mock("../../../../src/utils/logger-new.js", () => {
 });
 
 import { accountsListCommand } from "../../../../src/cli/commands/accounts-list.js";
-import { getLogger } from "../../../../src/utils/logger-new.js";
+import { getLogger } from "../../../../src/utils/logger.js";
 
 describe("accountsListCommand", () => {
   beforeEach(() => {

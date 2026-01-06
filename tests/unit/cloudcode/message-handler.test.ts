@@ -14,12 +14,15 @@ global.fetch = mockFetch;
 
 // Mock logger
 vi.mock("../../../src/utils/logger.js", () => ({
-  logger: {
+  getLogger: vi.fn(() => ({
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
     debug: vi.fn(),
-  },
+    trace: vi.fn(),
+  })),
+  initLogger: vi.fn(),
+  setLogLevel: vi.fn(),
 }));
 
 // Mock helpers
