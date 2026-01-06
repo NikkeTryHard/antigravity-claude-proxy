@@ -37,3 +37,6 @@ antigravity_accounts_*.json
 
 # Temp files
 error.md
+
+# Worktrees
+.worktrees/
