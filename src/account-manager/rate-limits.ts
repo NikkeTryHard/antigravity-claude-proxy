@@ -7,7 +7,7 @@
 
 import { DEFAULT_COOLDOWN_MS } from "../constants.js";
 import { formatDuration } from "../utils/helpers.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import type { Account, AccountSettings, ModelRateLimit } from "./types.js";
 
 /**

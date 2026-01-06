@@ -10,7 +10,7 @@ import crypto from "crypto";
 import http from "http";
 import type { IncomingMessage, ServerResponse } from "http";
 import { ANTIGRAVITY_ENDPOINT_FALLBACKS, ANTIGRAVITY_HEADERS, OAUTH_CONFIG, OAUTH_REDIRECT_URI } from "../constants.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 
 /**
  * PKCE code verifier and challenge

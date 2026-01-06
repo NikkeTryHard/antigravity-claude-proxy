@@ -8,7 +8,7 @@
 
 import { TOKEN_REFRESH_INTERVAL_MS, ANTIGRAVITY_AUTH_PORT } from "../constants.js";
 import { getAuthStatus } from "./database.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 
 /**
  * Chat params structure from Antigravity HTML page

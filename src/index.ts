@@ -5,7 +5,7 @@
 
 import app from "./server.js";
 import { DEFAULT_PORT } from "./constants.js";
-import { initLogger, getLogger } from "./utils/logger-new.js";
+import { initLogger, getLogger } from "./utils/logger.js";
 import { banner } from "./cli/ui.js";
 import path from "path";
 import os from "os";

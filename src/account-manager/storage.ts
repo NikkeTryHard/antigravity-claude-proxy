@@ -9,7 +9,7 @@ import { constants as fsConstants } from "fs";
 import { dirname } from "path";
 import { ACCOUNT_CONFIG_PATH } from "../constants.js";
 import { getAuthStatus } from "../auth/database.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import type { Account, AccountConfig, AccountSettings, TokenCacheEntry } from "./types.js";
 
 /**

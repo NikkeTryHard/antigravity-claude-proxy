@@ -6,7 +6,7 @@
  */
 
 import { convertGoogleToAnthropic } from "../format/index.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import type { GoogleResponse, GoogleUsageMetadata, GooglePart, AnthropicResponse } from "../format/types.js";
 
 // Re-export types

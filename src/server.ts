@@ -11,7 +11,7 @@ import { forceRefresh } from "./auth/token-extractor.js";
 import { REQUEST_BODY_LIMIT } from "./constants.js";
 import { AccountManager } from "./account-manager/index.js";
 import { formatDuration } from "./utils/helpers.js";
-import { getLogger } from "./utils/logger-new.js";
+import { getLogger } from "./utils/logger.js";
 import type { AnthropicRequest } from "./format/types.js";
 
 // Parse fallback flag directly from command line args to avoid circular dependency

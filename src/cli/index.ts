@@ -10,7 +10,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 import { DEFAULT_PORT } from "../constants.js";
-import { initLogger, setLogLevel, type LogLevel } from "../utils/logger-new.js";
+import { initLogger, setLogLevel, type LogLevel } from "../utils/logger.js";
 import { banner } from "./ui.js";
 
 // Resolve package.json path for version

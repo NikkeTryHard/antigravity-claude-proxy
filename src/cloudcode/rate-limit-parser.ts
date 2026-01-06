@@ -7,7 +7,7 @@
  */
 
 import { formatDuration } from "../utils/helpers.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 
 /**
  * Interface for objects with headers (like Response)

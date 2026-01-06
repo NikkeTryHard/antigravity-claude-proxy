@@ -8,7 +8,7 @@
 import * as crypto from "crypto";
 import { MIN_SIGNATURE_LENGTH, getModelFamily } from "../constants.js";
 import { cacheSignature, cacheThinkingSignature } from "../format/signature-cache.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import type { GoogleResponse } from "../format/types.js";
 
 /**

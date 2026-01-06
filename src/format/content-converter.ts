@@ -5,7 +5,7 @@
 
 import { MIN_SIGNATURE_LENGTH, GEMINI_SKIP_SIGNATURE } from "../constants.js";
 import { getCachedSignature, getCachedSignatureFamily } from "./signature-cache.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import type { AnthropicContentBlock, GooglePart } from "./types.js";
 
 /**

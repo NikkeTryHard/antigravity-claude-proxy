@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import app from "../../server.js";
 import { DEFAULT_PORT } from "../../constants.js";
-import { getLogger } from "../../utils/logger-new.js";
+import { getLogger } from "../../utils/logger.js";
 import { banner } from "../ui.js";
 
 // Get version from package.json

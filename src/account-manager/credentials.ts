@@ -7,7 +7,7 @@
 import { ANTIGRAVITY_DB_PATH, TOKEN_REFRESH_INTERVAL_MS, ANTIGRAVITY_ENDPOINT_FALLBACKS, ANTIGRAVITY_HEADERS, DEFAULT_PROJECT_ID } from "../constants.js";
 import { refreshAccessToken } from "../auth/oauth.js";
 import { getAuthStatus } from "../auth/database.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import { isNetworkError } from "../utils/helpers.js";
 import type { Account, TokenCacheEntry, OnInvalidCallback, OnSaveCallback } from "./types.js";
 

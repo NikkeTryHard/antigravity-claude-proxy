@@ -9,7 +9,7 @@ import { loadAccounts, loadDefaultAccount, saveAccounts } from "./storage.js";
 import { isAllRateLimited as checkAllRateLimited, getAvailableAccounts as getAvailable, getInvalidAccounts as getInvalid, clearExpiredLimits as clearLimits, resetAllRateLimits as resetLimits, markRateLimited as markLimited, markInvalid as markAccountInvalid, getMinWaitTimeMs as getMinWait } from "./rate-limits.js";
 import { getTokenForAccount as fetchToken, getProjectForAccount as fetchProject, clearProjectCache as clearProject, clearTokenCache as clearToken } from "./credentials.js";
 import { pickNext as selectNext, getCurrentStickyAccount as getSticky, shouldWaitForCurrentAccount as shouldWait, pickStickyAccount as selectSticky } from "./selection.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import type { Account, AccountSettings, TokenCacheEntry, AccountManagerStatus, AccountStatus, ShouldWaitResult } from "./types.js";
 
 // Re-export types for external consumers

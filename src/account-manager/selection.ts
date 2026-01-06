@@ -7,7 +7,7 @@
 
 import { MAX_WAIT_BEFORE_ERROR_MS } from "../constants.js";
 import { formatDuration } from "../utils/helpers.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import { clearExpiredLimits, getAvailableAccounts } from "./rate-limits.js";
 import type { Account, OnSaveCallback, AccountSelectionResult, ShouldWaitResult, StickyAccountResult } from "./types.js";
 

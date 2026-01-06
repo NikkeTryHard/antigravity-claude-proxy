@@ -5,7 +5,7 @@
 
 import { MIN_SIGNATURE_LENGTH } from "../constants.js";
 import { getCachedSignatureFamily } from "./signature-cache.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import type { ThinkingPart, ConversationState, AnalyzableMessage, AnthropicContentBlock, GooglePart, ModelFamily } from "./types.js";
 
 /**

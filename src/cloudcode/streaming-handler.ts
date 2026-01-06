@@ -8,7 +8,7 @@
 import { ANTIGRAVITY_ENDPOINT_FALLBACKS, MAX_RETRIES, MAX_WAIT_BEFORE_ERROR_MS } from "../constants.js";
 import { isRateLimitError, isAuthError } from "../errors.js";
 import { formatDuration, sleep, isNetworkError } from "../utils/helpers.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import { parseResetTime } from "./rate-limit-parser.js";
 import { buildCloudCodeRequest, buildHeaders } from "./request-builder.js";
 import { streamSSEResponse } from "./sse-streamer.js";

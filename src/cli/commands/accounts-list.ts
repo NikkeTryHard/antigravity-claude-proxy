@@ -4,7 +4,7 @@
  * List all configured accounts.
  */
 
-import { getLogger } from "../../utils/logger-new.js";
+import { getLogger } from "../../utils/logger.js";
 
 /**
  * Execute the accounts list command.

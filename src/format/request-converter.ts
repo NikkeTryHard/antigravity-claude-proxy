@@ -7,7 +7,7 @@ import { GEMINI_MAX_OUTPUT_TOKENS, getModelFamily, isThinkingModel } from "../co
 import { convertContentToParts, convertRole } from "./content-converter.js";
 import { sanitizeSchema, cleanSchemaForGemini } from "./schema-sanitizer.js";
 import { restoreThinkingSignatures, removeTrailingThinkingBlocks, reorderAssistantContent, filterUnsignedThinkingBlocks, hasGeminiHistory, needsThinkingRecovery, closeToolLoopForThinking } from "./thinking-utils.js";
-import { getLogger } from "../utils/logger-new.js";
+import { getLogger } from "../utils/logger.js";
 import type { AnthropicRequest, AnthropicMessage, GoogleRequest, GoogleContent, GooglePart, AnalyzableMessage } from "./types.js";
 
 /**
