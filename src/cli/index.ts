@@ -113,7 +113,7 @@ function createProgram(): Command {
     .description("Remove accounts interactively")
     .action(async (email?: string) => {
       const { accountsRemoveCommand } = await import("./commands/accounts-remove.js");
-      accountsRemoveCommand(email);
+      await accountsRemoveCommand(email);
     });
 
   accountsCmd
